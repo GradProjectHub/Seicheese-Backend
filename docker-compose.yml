@@ -1,0 +1,41 @@
+services:
+  go:
+    image: seicheese:go
+    container_name: go
+    ports:
+      - "1300:1300"
+    volumes:
+      - ./src:/home/user/go/src/app
+    tty: true
+    # command: air -c .air.toml
+    networks:
+      - seicheese-backend
+
+  db:
+    image: seicheese:db
+    container_name: mysql-8.4
+    ports:
+      - "3312:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - seicheese-backend
+
+  pma:
+    image: seicheese:admin
+    container_name: phpmyadmin
+    ports:
+      - "8880:80"
+    depends_on:
+      - db
+    networks:
+      - seicheese-backend
+
+networks:
+  seicheese-backend:
+    driver: bridge
+    external: true
+
+volumes:
+  db-data:
+    driver: local
