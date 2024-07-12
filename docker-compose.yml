@@ -7,7 +7,7 @@ services:
     volumes:
       - ./src:/home/user/go/src/app
     tty: true
-    # command: air -c .air.toml
+    command: air -c .air.toml
     networks:
       - seicheese-backend
 
