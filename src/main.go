@@ -1,14 +1,16 @@
 package main
 
 import (
-	"net/http"
-	"github.com/labstack/echo/v4"
+    "fmt"
+    "seicheese/database"
 )
 
 func main() {
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, wario!")
-	})
-	e.Logger.Fatal(e.Start(":1300"))
+    _, err := database.InitDB()
+    if err != nil {
+        fmt.Printf("データベースに接続できませんでした: %v\n", err)
+        return
+    }
+    
+    fmt.Println("データベースへの接続が成功しました")
 }
