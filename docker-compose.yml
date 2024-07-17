@@ -8,6 +8,8 @@ services:
       - ./src:/home/user/go/src/app
     tty: true
     command: air -c .air.toml
+    depends_on:
+      - db
     networks:
       - seicheese-backend
 
