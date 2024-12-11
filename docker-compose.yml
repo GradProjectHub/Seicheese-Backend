@@ -48,13 +48,7 @@ services:
       - letsencrypt:/etc/letsencrypt
       - ./ssl:/ssl
     network_mode: host
-    command: certonly --standalone -d api.seicheese.jp --agree-tos --email your@email.com --preferred-challenges http
-    ports:
-      - "8080:80"
-      - "8443:443"
-    networks:
-      net:
-        ipv4_address: 20.0.0.6
+    command: certonly --standalone -d api.seicheese.jp --agree-tos --email your@email.com --preferred-challenges http --preferred-ip-version 4
 
 networks:
   net:
@@ -63,7 +57,6 @@ networks:
       config:
         - subnet: 20.0.0.0/24
           gateway: 20.0.0.1
-        
 
 volumes:
   db-data:
