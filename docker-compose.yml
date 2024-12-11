@@ -4,8 +4,11 @@ services:
     container_name: go
     ports:
       - "1300:1300"
+      - "443:443"
     volumes:
       - ./src:/home/user/go/src/app
+      - ./ssl:/home/user/go/src/app/ssl
+      - letsencrypt:/etc/letsencrypt
     tty: true
     # command: air -c .air.toml
     env_file:
@@ -38,6 +41,20 @@ services:
       net:
         ipv4_address: 20.0.0.4
 
+  certbot:
+    image: certbot/certbot
+    container_name: seicheese-certbot
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - ./ssl:/ssl
+    command: certonly --standalone -d api.seicheese.jp --email your@email.com --agree-tos --no-eff-email
+    ports:
+      - "8080:80"
+      - "8443:443"
+    networks:
+      net:
+        ipv4_address: 20.0.0.6
+
 networks:
   net:
     driver: bridge
@@ -49,4 +66,6 @@ networks:
 
 volumes:
   db-data:
+    driver: local
+  letsencrypt:
     driver: local
