@@ -47,7 +47,8 @@ services:
     volumes:
       - letsencrypt:/etc/letsencrypt
       - ./ssl:/ssl
-    command: certonly --standalone -d api.seicheese.jp --email your@email.com --agree-tos --no-eff-email
+    network_mode: host
+    command: certonly --standalone -d api.seicheese.jp --agree-tos --email your@email.com --preferred-challenges http
     ports:
       - "8080:80"
       - "8443:443"
