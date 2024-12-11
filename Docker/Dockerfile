@@ -10,17 +10,22 @@ ARG GROUPNAME=user
 ARG UID=1000
 ARG GID=1000
 
-RUN groupadd -g $GID $GROUPNAME && useradd -m -s /bin/bash  -u $UID -g $GID $USERNAME
+# ユーザーとグループを作成、およびホームディレクトリを明示的に作成
+RUN groupadd -g $GID $GROUPNAME && \
+    mkdir -p /home/${USERNAME} && \
+    useradd -d /home/${USERNAME} -s /bin/bash -u $UID -g $GID $USERNAME && \
+    chown ${USERNAME}:${GROUPNAME} /home/${USERNAME}
 
-# Set Home Environment
 ENV HOME /home/${USERNAME}
-
-# Change User
-USER $USERNAME
-
-# Set GOPATH
 ENV GOPATH ${HOME}/go
 
+# 必要なディレクトリを作成し、権限を設定
+RUN mkdir -p ${GOPATH}/pkg && \
+    mkdir -p ${GOPATH}/bin && \
+    mkdir -p ${GOPATH}/src && \
+    chown -R ${USERNAME}:${GROUPNAME} ${HOME}
+
+USER $USERNAME
 
 # Go-dev
 FROM go-base AS go-dev
@@ -32,7 +37,7 @@ WORKDIR /home/user/go/src/app
 RUN chown -R $USERNAME:$GROUPNAME /home/user/go
 
 # Air Install
-RUN go install github.com/air-verse/air@latest
+RUN go get github.com/air-verse/air@latest
 
 # Goose Install
 RUN go install github.com/pressly/goose/v3/cmd/goose@latest
