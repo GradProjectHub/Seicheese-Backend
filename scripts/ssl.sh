@@ -3,7 +3,7 @@
 # 証明書の保存ディレクトリ作成
 mkdir -p ssl
 
-# 一時的にGoサーバーを停止（ポート解放）
+# 一時的にGoサーバーを停止（ポートの解放）
 echo "Stopping Go server..."
 docker compose stop go
 
