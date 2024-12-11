@@ -33,11 +33,13 @@ FROM go-base AS go-dev
 # Workdir
 WORKDIR /home/user/go/src/app
 
+# モジュールを初期化してからairをインストール
+RUN go mod init tmp && \
+    go install github.com/air-verse/air@latest && \
+    rm go.mod
+
 # Set permissons
 RUN chown -R $USERNAME:$GROUPNAME /home/user/go
-
-# Air Install
-RUN go get github.com/air-verse/air@latest
 
 # Goose Install
 RUN go install github.com/pressly/goose/v3/cmd/goose@latest
