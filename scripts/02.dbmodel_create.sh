@@ -2,11 +2,10 @@
 
 set -e
 
-docker compose exec -u root go bash -c "
+docker compose exec -u root go bash -c "\
 mkdir -p /home/user/go/src/app/models && \
 chown -R user:user /home/user/go/src/app/models && \
-chmod -R 755 /home/user/go/src/app/models && \
-"
+chmod -R 755 /home/user/go/src/app/models"
 
 # データベースの接続情報 (docker-compose.ymlと一致させる)
 DB_USER="root"
