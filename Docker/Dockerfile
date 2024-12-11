@@ -23,6 +23,7 @@ ENV GOPATH ${HOME}/go
 RUN mkdir -p ${GOPATH}/pkg && \
     mkdir -p ${GOPATH}/bin && \
     mkdir -p ${GOPATH}/src && \
+    mkdir -p ${GOPATH}/src/app && \
     chown -R ${USERNAME}:${GROUPNAME} ${HOME}
 
 USER $USERNAME
@@ -31,12 +32,12 @@ USER $USERNAME
 FROM go-base AS go-dev
 
 # Workdir
-WORKDIR /home/user/go/src/app
+WORKDIR ${GOPATH}/src/app
 
 # モジュールを初期化してからairをインストール
-RUN go mod init tmp && \
-    go install github.com/air-verse/air@latest && \
-    rm go.mod
+RUN cd $(mktemp -d) && \
+    go mod init tmp && \
+    go install github.com/air-verse/air@latest
 
 # Set permissons
 RUN chown -R $USERNAME:$GROUPNAME /home/user/go
